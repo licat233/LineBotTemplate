@@ -27,10 +27,14 @@ var bot *linebot.Client
 func main() {
 	var err error
 	bot, err = linebot.New(os.Getenv("ChannelSecret"), os.Getenv("ChannelAccessToken"))
-	log.Println("Bot:", bot, " err:", err)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
 	http.HandleFunc("/callback", callbackHandler)
 	port := os.Getenv("PORT")
 	addr := fmt.Sprintf(":%s", port)
+	fmt.Println("Listening on " + addr)
 	http.ListenAndServe(addr, nil)
 }
 
